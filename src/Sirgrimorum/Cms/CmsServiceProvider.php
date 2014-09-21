@@ -5,6 +5,8 @@ namespace Sirgrimorum\Cms;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
 use Sirgrimorum\Cms\Translations\BindTranslationsToJs;
+use SirGrimorum\Cms\TransArticles\GetArticleFromDataBase;
+
 use Config;
 
 class CmsServiceProvider extends ServiceProvider {
@@ -24,8 +26,8 @@ class CmsServiceProvider extends ServiceProvider {
     public function boot() {
         $this->package('sirgrimorum/cms');
         AliasLoader::getInstance()->alias(
-            'Article',
-            'Sirgrimorum\Cms\Articles\Facades\Article'
+            'TransArticle',
+            'Sirgrimorum\Cms\TransArticles\Facades\TransArticles'
         );
         AliasLoader::getInstance()->alias(
             'Translations',
@@ -39,8 +41,8 @@ class CmsServiceProvider extends ServiceProvider {
      * @return void
      */
     public function register() {
-        $this->app->bind('Article', function($app) {
-            return new \SirGrimorum\Cms\Articles\GetArticleFromDataBase($app->getLocale());
+        $this->app->bind('TransArticles', function($app) {
+            return new GetArticleFromDataBase($app->getLocale());
         });
         $this->app->bind('Translations',function($app){
             $view = Config::get('cms::config.bind_trans_vars_to_this_view');
@@ -57,7 +59,7 @@ class CmsServiceProvider extends ServiceProvider {
      * @return array
      */
     public function provides() {
-        return array('Article','Translations');
+        return array('TransArticles','Translations');
     }
 
 }

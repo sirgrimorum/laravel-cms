@@ -1,8 +1,8 @@
-<?php namespace Sirgrimorum\Cms\Articles\Facades;
+<?php namespace Sirgrimorum\Cms\TransArticles\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class Article extends Facade {
+class TransArticles extends Facade {
 
     /**
      * Name of the binding in the IoC container
@@ -11,7 +11,7 @@ class Article extends Facade {
      */
     protected static function getFacadeAccessor()
     {
-        return 'Article';
+        return 'TransArticles';
     }
 
 } 

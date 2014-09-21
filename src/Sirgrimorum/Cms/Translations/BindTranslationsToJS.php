@@ -3,7 +3,6 @@
 namespace Sirgrimorum\Cms\Translations;
 
 use Illuminate\Events\Dispatcher;
-use Illuminate\Translation\Translator;
 use Illuminate\Filesystem\Filesystem;
 
 class BindTranslationsToJs{
