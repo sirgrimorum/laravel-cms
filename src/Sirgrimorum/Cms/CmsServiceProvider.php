@@ -31,14 +31,20 @@ class CmsServiceProvider extends ServiceProvider {
         AliasLoader::getInstance()->alias(
                 'Translations', 'Sirgrimorum\Cms\Translations\Facades\Translations'
         );
+        //define a constant that the rest of the package can use to conditionally use pieces of Laravel 4.1.x vs. 4.0.x
+        $this->app['administrator.4.1'] = version_compare(\Illuminate\Foundation\Application::VERSION, '4.1') > -1;
+
+        //set up an alias for the base laravel controller to accommodate >=4.1 and <4.1
+        if (!class_exists('AdministratorBaseController')) { // Verify alias is not already created
+            if ($this->app['administrator.4.1'])
+                class_alias('Illuminate\Routing\Controller', 'AdministratorBaseController');
+            else
+                class_alias('Illuminate\Routing\Controllers\Controller', 'AdministratorBaseController');
+        }
         // Registering the validator extension with the validator factory
-        $this->app['validator']->resolver(function($translator, $data, $rules, $messages)
-        {
+        $this->app['validator']->resolver(function($translator, $data, $rules, $messages) {
             return new ValidatorExtension(
-                $translator,
-                $data,
-                $rules,
-                $messages
+                    $translator, $data, $rules, $messages
             );
         });
         //include our filters, view composers, and routes
