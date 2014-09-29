@@ -15,10 +15,14 @@
     },
     "autoload": {
         "classmap": [
-            "src/migrations"
+            "src/migrations",
+            "src/controllers",
+            "src/extensions",
+            "src/models"
         ],
         "psr-0": {
-            "Sirgrimorum\\Cms\\": "src/"
+            "Sirgrimorum\\Cms\\": "src/",
+            "Sirgrimorum\\Cms\\Models": "app/models/"
         }
     },
     "minimum-stability": "stable"

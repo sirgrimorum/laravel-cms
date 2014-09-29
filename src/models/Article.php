@@ -1,11 +1,12 @@
 <?php
 
-namespace Sirgrimorum\Cms\Models;
+namespace Sirgrimorum\Cms;
 
 use Illuminate\Database\Eloquent\Model;
 
 class Article extends Model {
 
+    
     public function scopeFindArticle($query,$name) {
         $segments = explode(".", $name);
         $scope = array_shift($segments);

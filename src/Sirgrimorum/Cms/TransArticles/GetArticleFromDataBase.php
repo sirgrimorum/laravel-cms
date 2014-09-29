@@ -1,7 +1,7 @@
 <?php namespace SirGrimorum\Cms\TransArticles;
 
 use Exception;
-use Sirgrimorum\Cms\Models\Article;
+use Sirgrimorum\Cms\Article;
 
 class GetArticleFromDataBase {
 

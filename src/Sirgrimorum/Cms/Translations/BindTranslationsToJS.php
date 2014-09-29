@@ -4,6 +4,8 @@ namespace Sirgrimorum\Cms\Translations;
 
 use Illuminate\Events\Dispatcher;
 use Illuminate\Filesystem\Filesystem;
+use Exception;
+use Sirgrimorum\Cms\Article;
 
 class BindTranslationsToJs{
 
@@ -71,4 +73,44 @@ class BindTranslationsToJs{
         });
     }
 
+    /**
+     * Bind the given JavaScript to the
+     * view using Laravel event listeners
+     *
+     * @param $scope The scope to load
+     */
+    public function putarticle($scope) {
+        $lang = $this->app->getLocale();
+        $listo = false;
+        try {
+            $articles = Article::where("scope", "=", $scope)->where("lang", "=", $lang)->get();
+            if (count($articles)) {
+                $listo = true;
+            } else {
+                $articles = Article::where("scope", "=", $scope)->get();
+                if (count($articles)) {
+                    $listo = true;
+                    //return $article->content . "<span class='label label-warning'>" . $article->lang . "</span>";
+                } else {
+                    $jsarray = $langfile;
+                }
+            }
+        } catch (Exception $ex) {
+            return $scope . " - Error:" . print_r($ex, true);
+        }
+        if ($listo){
+            if (count($articles)>1){
+                $trans =  [];
+                foreach($articles as $article){
+                    $trans[$article->nickname] = $article->content;
+                }
+                $jsarray = json_encode($trans);
+            }else{
+                $jsarray = $article->content;
+            }
+        }
+        $this->event->listen("composing: {$this->viewToBind}", function() use ($jsarray,$scope) {
+            echo "<script>window.{$this->basevar} = window.{$this->basevar} || {};{$this->basevar}.{$scope} = {$jsarray};</script>";
+        });
+    }
 }

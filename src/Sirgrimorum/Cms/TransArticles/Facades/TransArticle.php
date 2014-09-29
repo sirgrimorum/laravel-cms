@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Facade;
 
-class TransArticles extends Facade {
+class TransArticle extends Facade {
 
     /**
      * Name of the binding in the IoC container
