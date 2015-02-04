@@ -5,7 +5,7 @@
         <!-- Titulo del sitio -->
         <title>{{ Lang::get('principal.labels.titulo_home') }}</title>
         <!-- Icono del sitio -->
-        <link rel="shortcut icon" href="{{asset('images/img/todosen4icono.ico')}}">
+        <link rel="shortcut icon" href="{{asset('images/img/sirgrimorum.ico')}}">
         <!-- Metas adicionales -->
         <meta name="author" content="{{ Lang::get('principal.metadata.author') }}">
         <meta name="title" content="{{ Lang::get('principal.metadata.title') }}">

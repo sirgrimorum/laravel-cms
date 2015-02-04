@@ -27,10 +27,11 @@ class CrudController extends Controller {
     public function index() {
         $modeloM = ucfirst($this->modelo);
         $registros = $modeloM::all();
-        return View::make('cms::crud.index', array('tabla' => $this->tabla, 'modelo' => $this->modelo, 'plural' => $this->plural, 'registros' => $registros, 'relaciones' => $this->relaciones, 'identificador' => $this->id, 'base_url' => Config::get('cms::admin_prefix')));
+        $auxarr_modelo=explode("\\",$this->modelo);
+        return View::make('cms::crud.index', array('tabla' => $this->tabla, 'modelo' => array_pop($auxarr_modelo), 'plural' => $this->plural, 'registros' => $registros, 'relaciones' => $this->relaciones, 'identificador' => $this->id, 'base_url' => Config::get('cms::admin_prefix')));
     }
-
-    public function create() {
+    
+     public function create() {
         foreach ($this->relaciones as $clave => $relacion) {
             $lista = array("-" => "-");
             $modeloM = ucfirst($relacion["modelo"]);
@@ -39,8 +40,8 @@ class CrudController extends Controller {
             }
             $this->relaciones[$clave]['todos'] = $lista;
         }
-
-        return View::make('cms::crud.create', array('tabla' => $this->tabla, 'modelo' => $this->modelo, 'plural' => $this->plural, 'relaciones' => $this->relaciones, 'campos' => $this->campos, 'base_url' => Config::get('cms::admin_prefix')));
+        $auxarr_modelo=explode("\\",$this->modelo);
+        return View::make('cms::crud.create', array('tabla' => $this->tabla, 'modelo' => array_pop($auxarr_modelo), 'plural' => $this->plural, 'relaciones' => $this->relaciones, 'campos' => $this->campos, 'base_url' => Config::get('cms::admin_prefix')));
     }
 
     public function store() {
@@ -81,7 +82,8 @@ class CrudController extends Controller {
         $modeloM = ucfirst($this->modelo);
         $registro = $modeloM::find($id);
 
-        return View::make('cms::crud.show', array('tabla' => $this->tabla, 'modelo' => $this->modelo, 'plural' => $this->plural, 'registro' => $registro, 'relaciones' => $this->relaciones, 'nombre' => $this->nombre, 'base_url' => Config::get('cms::admin_prefix')));
+        $auxarr_modelo=explode("\\",$this->modelo);
+        return View::make('cms::crud.show', array('tabla' => $this->tabla, 'modelo' => array_pop($auxarr_modelo), 'plural' => $this->plural, 'registro' => $registro, 'relaciones' => $this->relaciones, 'nombre' => $this->nombre, 'base_url' => Config::get('cms::admin_prefix')));
     }
 
     public function edit($id) {
@@ -96,7 +98,8 @@ class CrudController extends Controller {
         $modeloM = ucfirst($this->modelo);
         $registro = $modeloM::find($id);
 
-        return View::make('cms::crud.edit', array('tabla' => $this->tabla, 'modelo' => $this->modelo, 'plural' => $this->plural, 'registro' => $registro, 'relaciones' => $this->relaciones, 'nombre' => $this->nombre, 'id' => $this->id, 'campos' => $this->campos, 'base_url' => Config::get('cms::admin_prefix')));
+        $auxarr_modelo=explode("\\",$this->modelo);
+        return View::make('cms::crud.edit', array('tabla' => $this->tabla, 'modelo' => array_pop($auxarr_modelo), 'plural' => $this->plural, 'registro' => $registro, 'relaciones' => $this->relaciones, 'nombre' => $this->nombre, 'id' => $this->id, 'campos' => $this->campos, 'base_url' => Config::get('cms::admin_prefix')));
     }
 
     public function update($id) {

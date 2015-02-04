@@ -1,12 +1,11 @@
 @extends("cms::layouts.includes.principal")
 
 @section('menuobj')
-<li><a href="{{ URL::to($base_url . "/" . $plural) }}">{{ Lang::get('crud.layout.ver') }} {{ ucfirst($plural) }}</a></li>
-<li><a href="{{ URL::to($base_url . "/" . $plural .'/create') }}">{{ Lang::get('crud.layout.crear') }} {{ $modelo }}</a></li>
+<li><a href="{{ URL::to($base_url . "/" . $plural .'/create') }}">{{ Lang::get('cms::crud.layout.crear') }} {{ $modelo }}</a></li>
 @stop
 
 @section('contenido')
-<h1>{{ Lang::get('crud.edit.titulo') }} {{ $modelo }} {{ $registro->{$nombre} }}</h1>
+<h1>{{ Lang::get('cms::crud.edit.titulo') }} {{ $modelo }} {{ $registro->{$nombre} }}</h1>
 
 {{ HTML::ul($errors->all()) }}
 
@@ -39,7 +38,7 @@ foreach ($table_describes as $k => $v) {
                 @endif
 	</div>
     @endforeach
-    {{ Form::submit(Lang::get('crud.edit.titulo') . ' ' . $registro->{$nombre}, array('class' => 'btn btn-primary')) }}
+    {{ Form::submit(Lang::get('cms::crud.edit.titulo') . ' ' . $registro->{$nombre}, array('class' => 'btn btn-primary')) }}
 {{ Form::close() }}
 
 @stop

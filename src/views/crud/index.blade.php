@@ -1,8 +1,7 @@
 @extends("cms::layouts.includes.principal")
 
 @section('menuobj')
-<li><a href="{{ URL::to($base_url . "/" . $plural) }}">{{ Lang::get('crud.layout.ver') }} {{ ucfirst($plural) }}</a></li>
-<li><a href="{{ URL::to($base_url . "/" . $plural .'/create') }}">{{ Lang::get('crud.layout.crear') }} {{ $modelo }}</a></li>
+<li><a href="{{ URL::to($base_url . "/" . $plural .'/create') }}">{{ Lang::get('cms::crud.layout.crear') }} {{ $modelo }}</a></li>
 @stop
 
 @section('contenido')
@@ -22,7 +21,6 @@ foreach ($table_describes as $k => $v) {
         unset($table_describes[$kt]);
     }
 }
-
 ?>
 <table class="table table-striped table-bordered">
     <thead>
@@ -53,10 +51,10 @@ foreach ($table_describes as $k => $v) {
             <td>
                 {{ Form::open(array('url' => $base_url . "/"  . $plural . '/' . $value[$identificador], 'class' => 'pull-right')) }}
                 {{ Form::hidden('_method', 'DELETE') }}
-                {{ Form::submit(Lang::get('crud.index.eliminar'), array('class' => 'btn btn-warning')) }}
+                {{ Form::submit(Lang::get('cms::crud.index.eliminar'), array('class' => 'btn btn-warning')) }}
                 {{ Form::close() }}
-                <a class="btn btn-small btn-success" href="{{ URL::to( $base_url . "/"  . $plural . '/' . $value[$identificador]) }}">{{ Lang::get('crud.index.ver') }}</a>
-                <a class="btn btn-small btn-info" href="{{ URL::to( $base_url . "/"  . $plural . '/' . $value[$identificador] . '/edit') }}">{{ Lang::get('crud.index.editar') }}</a>
+                <a class="btn btn-small btn-success" href="{{ URL::to( $base_url . "/"  . $plural . '/' . $value[$identificador]) }}">{{ Lang::get('cms::crud.index.ver') }}</a>
+                <a class="btn btn-small btn-info" href="{{ URL::to( $base_url . "/"  . $plural . '/' . $value[$identificador] . '/edit') }}">{{ Lang::get('cms::crud.index.editar') }}</a>
             </td>
         </tr>
         @endforeach

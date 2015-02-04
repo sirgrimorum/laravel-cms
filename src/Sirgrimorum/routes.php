@@ -6,6 +6,10 @@ Route::group(array('prefix' => Config::get('cms::admin_prefix'), 'before' => 'va
         'as' => 'admin_translations_home',
         'uses' => 'Sirgrimorum\Cms\AdminTransController@home',
     ));
+    Route::get('/relocate/{lang?}', array(
+        'as' => 'admin_translations_relocate',
+        'uses' => 'Sirgrimorum\Cms\AdminTransController@relocate',
+    ));
     $routes = Config::get('cms::admin_routes');
     foreach ($routes as $model => $opciones) {
         $classname = "{$model}adminController";

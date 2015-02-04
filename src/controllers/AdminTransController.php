@@ -20,4 +20,10 @@ class AdminTransController extends Controller{
     public function home() {
         return View::make("cms::layouts.home");
     }
+    public function relocate($lang= null) {
+        if ($lang != null){
+            App::setLocale($lang);
+        }
+        return View::make("cms::layouts.home");
+    }
 }

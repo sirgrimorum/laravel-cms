@@ -11,7 +11,7 @@ class Article extends Model {
         $segments = explode(".", $name);
         $scope = array_shift($segments);
         $nickname = implode(".", $segments);
-        return $query->where("scope", "=", $scope)->where("nickname", "=", $nickname);
+        return $query->where("activated","=","1")->where("scope", "=", $scope)->where("nickname", "=", $nickname);
     }
 
 }

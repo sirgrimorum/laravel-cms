@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>{{ Lang::get('crud.privado.titulo') }}</title>
+        <title>{{ Lang::get('cms::crud.privado.titulo') }}</title>
         {{ HTML::style("css/bootstrap.css") }}
     </head>
     <body>
@@ -30,7 +30,7 @@
                             <div class="dropdown-menu" id='intoptkg'>
 
                                 <a href="{{URL::to('todosen4/loginfb')}}" class="btn btn-block btn-social btn-facebook">
-                                    <i class="fa fa-facebook"></i> {{ Lang::get('crud.privado.ingresarfb') }}
+                                    <i class="fa fa-facebook"></i> {{ Lang::get('cms::crud.privado.ingresarfb') }}
                                 </a>
 
                             </div>

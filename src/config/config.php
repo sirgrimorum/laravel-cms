@@ -35,6 +35,7 @@ return [
       |
      */
     'default_locale' => 'en',
+    'list_locales' => ['en','es'],
     /*
       |--------------------------------------------------------------------------
       | Prefix for administrator

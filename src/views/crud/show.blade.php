@@ -1,8 +1,7 @@
 @extends("cms::layouts.includes.principal")
 
 @section('menuobj')
-<li><a href="{{ URL::to($base_url . "/" . $plural) }}">{{ Lang::get('crud.layout.ver') }} {{ ucfirst($plural) }}</a></li>
-<li><a href="{{ URL::to($base_url . "/" . $plural .'/create') }}">{{ Lang::get('crud.layout.crear') }} {{ $modelo }}</a></li>
+<li><a href="{{ URL::to($base_url . "/" . $plural .'/create') }}">{{ Lang::get('cms::crud.layout.crear') }} {{ $modelo }}</a></li>
 @stop
 
 @section('contenido')
