@@ -1,17 +1,26 @@
 <?php
-$selects = array('column_name as field', 'column_type as type', 'is_nullable as null', 'column_key as key', 'column_default as default', 'extra as extra');
-$table_describes = DB::table('information_schema.columns')
-        ->where('table_name', '=', $tabla)
-        ->get($selects);
-foreach ($table_describes as $k => $v) {
-    if (($kt = array_search($v, $table_describes)) !== false and $k != $kt) {
-        unset($table_describes[$kt]);
+$tabla = $config['tabla'];
+$campos = $config['campos'];
+$botones = $config['botones'];
+$relaciones = $config['relaciones'];
+$identificador = $config['id'];
+
+if ($config['render']=="all"){
+    $selects = array('column_name as field', 'column_type as type', 'is_nullable as null', 'column_key as key', 'column_default as default', 'extra as extra');
+    $table_describes = DB::table('information_schema.columns')
+            ->where('table_name', '=', $tabla)
+            ->get($selects);
+    foreach ($table_describes as $k => $v) {
+        if (($kt = array_search($v, $table_describes)) !== false and $k != $kt) {
+            unset($table_describes[$kt]);
+        }
     }
 }
 ?>
 <div class="jumbotron text-center">
     <h2>{{ $registro->{$nombre} }}</h2>
     <p>
+    @if ($config['render'] == "all")
         @foreach($table_describes as $key => $columna)
         @if (isset($relaciones[$columna->field]))
         <strong>{{ ucfirst($relaciones[$columna->field]['modelo']) }}: </strong>
@@ -23,5 +32,22 @@ foreach ($table_describes as $k => $v) {
         <strong>{{ ucfirst($columna->field) }}:</strong> {{ $registro->{$columna->field} }}<br>
         @endif
         @endforeach
+    @else
+        @foreach($campos as $columna => $datos)
+            @if ($datos['tipo']=="relationship")
+                <strong>{{ ucfirst($datos['label']) }}: </strong>
+                @if (count($registro->{$datos['modelo']}))
+                    {{ $registro->{$datos['modelo']}->{$datos['campo']} }}
+                @endif
+                <br>
+            @elseif ($datos['tipo']=="select")
+                <strong>{{ ucfirst($datos['label']) }}: </strong>
+                {{ $datos['opciones'][$registro->{$column}] }}
+                <br>
+            @else
+                <strong>{{ ucfirst($datos['label']) }}:</strong> {{ $registro->{$columna} }}<br>
+            @endif
+        @endforeach
+    @endif
     </p>
 </div>
