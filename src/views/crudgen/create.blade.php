@@ -38,7 +38,7 @@ if ($config['render']=="all"){
         @endforeach
     @else
         @foreach($campos as $columna => $datos)
-            @if (View::exist("cms::crudgen.templates." .$datos['tipo']))
+            @if (View::exists("cms::crudgen.templates." .$datos['tipo']))
                 @include("cms::crudgen.templates." . $datos['tipo'])
             @else
                 @include("cms::crudgen.templates.text")
