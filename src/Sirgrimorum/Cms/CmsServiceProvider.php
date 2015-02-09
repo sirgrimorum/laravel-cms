@@ -6,6 +6,7 @@ use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
 use Sirgrimorum\Cms\Translations\BindTranslationsToJs;
 use Sirgrimorum\Cms\TransArticles\GetArticleFromDataBase;
+use Sirgrimorum\Cms\CrudLoader\CrudGenerator;
 use Sirgrimorum\Cms\ValidatorExtension;
 use Config;
 
@@ -30,6 +31,9 @@ class CmsServiceProvider extends ServiceProvider {
         );
         AliasLoader::getInstance()->alias(
                 'Translations', 'Sirgrimorum\Cms\Translations\Facades\Translations'
+        );
+        AliasLoader::getInstance()->alias(
+                'CrudLoader', 'Sirgrimorum\Cms\CrudLoader\Facades\CrudLoader'
         );
         //define a constant that the rest of the package can use to conditionally use pieces of Laravel 4.1.x vs. 4.0.x
         $this->app['administrator.4.1'] = version_compare(\Illuminate\Foundation\Application::VERSION, '4.1') > -1;
@@ -61,6 +65,9 @@ class CmsServiceProvider extends ServiceProvider {
         $this->app->bind('TransArticles', function($app) {
             return new GetArticleFromDataBase($app->getLocale());
         });
+        $this->app->bind('CrudLoader', function($app) {
+            return new CrudGenerator($app);
+        });
         $this->app->bind('Translations', function($app) {
             $view = Config::get('cms::config.bind_trans_vars_to_this_view');
             $group = Config::get('cms::config.trans_group');
@@ -76,7 +83,7 @@ class CmsServiceProvider extends ServiceProvider {
      * @return array
      */
     public function provides() {
-        return array('TransArticles', 'Translations');
+        return array('TransArticles', 'Translations','CrudLoader');
     }
 
 }
