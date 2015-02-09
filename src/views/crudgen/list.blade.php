@@ -68,9 +68,13 @@ if ($config['render']=="all"){
         @endif
             @if (count($botones)>0)
             <td>
+                @if (is_array($botones))
                 @foreach ($botones as $boton)
                 {{ str_replace("{ID}",$value[$identificador],$boton) }}
                 @endforeach
+                @else
+                {{ str_replace("{ID}",$value[$identificador],$botones) }}
+                @endif
             </td>
             @endif
         </tr>

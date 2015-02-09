@@ -46,9 +46,13 @@ if ($config['render']=="all"){
         @endforeach
     @endif
     @if (count($botones)>0)
+        @if (is_array($botones))
         @foreach ($botones as $boton)
             {{ Form::submit($boton, array('class' => 'btn btn-primary')) }}
         @endforeach
+        @else
+            {{ Form::submit($botones, array('class' => 'btn btn-primary')) }}
+        @endif
     @else
         {{ Form::submit(Lang::get('cms::crud.create.titulo'), array('class' => 'btn btn-primary')) }}
     @endif
