@@ -35,7 +35,7 @@ class CrudGenerator {
             }
         } else {
             foreach ($config['campos'] as $clave => $relacion) {
-                if ($datos['tipo'] == "relationship") {
+                if ($relacion['tipo'] == "relationship") {
                     $lista = array("-" => "-");
                     $modeloM = ucfirst($relacion["modelo"]);
                     foreach ($modeloM::all() as $elemento) {
@@ -69,7 +69,7 @@ class CrudGenerator {
             }
         } else {
             foreach ($config['campos'] as $clave => $relacion) {
-                if ($datos['tipo'] == "relationship") {
+                if ($relacion['tipo'] == "relationship") {
                     $lista = array("-" => "-");
                     $modeloM = ucfirst($relacion["modelo"]);
                     foreach ($modeloM::all() as $elemento) {
