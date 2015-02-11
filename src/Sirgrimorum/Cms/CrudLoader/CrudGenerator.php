@@ -24,7 +24,7 @@ class CrudGenerator {
     }
 
     function create($config) {
-        if ($config['render'] == "all") {
+        if (isset($config['render'])) {
             foreach ($config['relaciones'] as $clave => $relacion) {
                 $lista = array("-" => "-");
                 $modeloM = ucfirst($relacion["modelo"]);
