@@ -7,7 +7,7 @@ if (isset($config['relaciones'])) {
 }
 $identificador = $config['id'];
 
-if ($config['render']=="all"){
+if (isset($config['render'])){
     $selects = array('column_name as field', 'column_type as type', 'is_nullable as null', 'column_key as key', 'column_default as default', 'extra as extra');
     $table_describes = DB::table('information_schema.columns')
             ->where('table_name', '=', $tabla)
@@ -22,7 +22,7 @@ if ($config['render']=="all"){
 <div class="jumbotron text-center">
     <h2>{{ $registro->{$nombre} }}</h2>
     <p>
-    @if ($config['render'] == "all")
+    @if (isset($config['render']))
         @foreach($table_describes as $key => $columna)
         @if (isset($relaciones[$columna->field]))
         <strong>{{ ucfirst($relaciones[$columna->field]['modelo']) }}: </strong>

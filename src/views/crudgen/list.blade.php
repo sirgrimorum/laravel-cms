@@ -10,7 +10,7 @@ if (isset($config['relaciones'])) {
     $relaciones = $config['relaciones'];
 }
 
-if ($config['render']=="all"){
+if (isset($config['render'])){
     $selects = array('column_name as field', 'column_type as type', 'is_nullable as null', 'column_key as key', 'column_default as default', 'extra as extra');
     $table_describes = DB::table('information_schema.columns')
             ->where('table_name', '=', $tabla)
@@ -25,7 +25,7 @@ if ($config['render']=="all"){
 <table class="table table-striped table-bordered" id='list_{{ $tabla }}'>
     <thead>
         <tr>
-        @if ($config['render'] == "all")
+        @if (isset($config['render']))
             @foreach($table_describes as $key => $columna)
             @if (isset($relaciones[$columna->field]))
             <th>{{ ucfirst($relaciones[$columna->field]['modelo']) }}</th>
@@ -43,7 +43,7 @@ if ($config['render']=="all"){
     <tbody>
         @foreach($registros as $key => $value)
         <tr>
-        @if ($config['render'] == "all")
+        @if (isset($config['render']))
             @foreach($table_describes as $columna)
                 @if (isset($relaciones[$columna->field]))
                     @if (count($value->{$relaciones[$columna->field]['modelo']}))

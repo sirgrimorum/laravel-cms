@@ -10,7 +10,7 @@ if (isset($config['relaciones'])) {
 $identificador = $config['id'];
 $url = $config['url'];
 
-if ($config['render']=="all"){
+if (isset($config['render'])){
     $selects = array('column_name as field', 'column_type as type', 'is_nullable as null', 'column_key as key', 'column_default as default', 'extra as extra');
     $table_describes = DB::table('information_schema.columns')
             ->where('table_name', '=', $tabla)
@@ -24,7 +24,7 @@ if ($config['render']=="all"){
 
 ?>
 {{ Form::model($registro, array('url' => array($url, $registro->{$identificador}), 'method' => 'PUT')) }}
-    @if ($config['render'] == "all")
+    @if (isset($config['render']))
         @foreach($table_describes as $key => $columna)
             <div class="form-group">
                 @if (array_key_exists($columna->field,$campos))
