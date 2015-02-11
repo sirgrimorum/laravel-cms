@@ -9,6 +9,7 @@ $botones = $config['botones'];
 if (isset($config['relaciones'])) {
     $relaciones = $config['relaciones'];
 }
+$identificador = $config['id'];
 
 if (isset($config['render'])){
     $selects = array('column_name as field', 'column_type as type', 'is_nullable as null', 'column_key as key', 'column_default as default', 'extra as extra');
