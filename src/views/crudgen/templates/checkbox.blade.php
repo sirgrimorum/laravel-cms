@@ -23,7 +23,7 @@ if (stripos($valor,$dato)===false){
     </label>
     {{ $datos2['label'] }}
     <span class="help-block" id="{{ $tabla . '_' . $columna . '_' . $valor }}_help">
-        @if (isset($datos2['description'])
+        @if (isset($datos2['description']))
         {{ $datos2['description'] }}
         @endif
     </span>
@@ -43,7 +43,7 @@ if ($datos['valor']==$dato){
     </label>
     {{ $datos['label'] }}
     <span class="help-block" id="{{ $tabla . '_' . $columna }}_help">
-        @if (isset($datos['description'])
+        @if (isset($datos['description']))
         {{ $datos['description'] }}
         @endif
     </span>
