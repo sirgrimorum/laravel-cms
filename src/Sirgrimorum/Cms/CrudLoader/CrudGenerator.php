@@ -9,20 +9,18 @@ use Exception;
 class CrudGenerator {
 
     /**
-     * Actual localization
      * 
-     * @var string 
-     */
-    protected $lang;
-
-    /**
-     * 
-     * @param string $lang If '' get the current localization
+     * @param string $app Ipara nada
      */
     function __construct($app) {
         
     }
 
+    /**
+     * Generate create view for a model
+     * @param array $config Configuration array
+     * @return HTML Create form
+     */
     function create($config) {
         if (isset($config['render'])) {
             foreach ($config['relaciones'] as $clave => $relacion) {
@@ -49,15 +47,31 @@ class CrudGenerator {
         return $view->render();
     }
 
-    public function show($config, $id) {
-        $modeloM = ucfirst($config['modelo']);
-        $registro = $modeloM::find($id);
+    /**
+     * Generate view to show a model
+     * @param array $config Configuration array
+     * @param integer $id Key of the object
+     * @param Model $registro Optional The Object
+     * @return HTML the Object
+     */
+    public function show($config, $id, $registro = null) {
+        if ($registro == null) {
+            $modeloM = ucfirst($config['modelo']);
+            $registro = $modeloM::find($id);
+        }
 
-        $view = View::make('cms::crugen.show', array('config' => $config));
+        $view = View::make('cms::crugen.show', array('config' => $config, 'registro' => $registro));
         return $view->render();
     }
 
-    public function edit($config, $id) {
+    /**
+     * Generate de edit view of a model
+     * @param array $config Configuration array
+     * @param integer $id Key of the object
+     * @param Model $registro Optional The object
+     * @return HTML Edit form
+     */
+    public function edit($config, $id, $registro = null) {
         if ($config['render'] == "all") {
             foreach ($config['relaciones'] as $clave => $relacion) {
                 $lista = array("-" => "-");
@@ -79,17 +93,26 @@ class CrudGenerator {
                 }
             }
         }
-        $modeloM = ucfirst($config['modelo']);
-        $registro = $modeloM::find($id);
-
-        $view = View::make('cms::crudgen.edit', array('config' => $config));
+        if ($registro == null) {
+            $modeloM = ucfirst($config['modelo']);
+            $registro = $modeloM::find($id);
+        }
+        $view = View::make('cms::crudgen.edit', array('config' => $config, 'registro' => $registro));
         return $view->render();
     }
 
-    public function lists($config) {
-        $modeloM = ucfirst($config['modelo']);
-        $registros = $modeloM::all();
-        $view = View::make('cms::crudgen.list', array('config' => $config));
+    /**
+     * Generate a list of objects of a model
+     * @param array $config Configuration array
+     * @param Model() $registros Optional Array of objects to show
+     * @return HTML Table with the objects
+     */
+    public function lists($config, $registros = null) {
+        if ($registros == null) {
+            $modeloM = ucfirst($config['modelo']);
+            $registros = $modeloM::all();
+        }
+        $view = View::make('cms::crudgen.list', array('config' => $config, 'registros' => $registros));
         return $view->render();
     }
 

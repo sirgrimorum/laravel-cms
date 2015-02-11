@@ -1,3 +1,4 @@
+{{ HTML::ul($errors->all()) }}
 <?php
 $tabla = $config['tabla'];
 $campos = $config['campos'];
