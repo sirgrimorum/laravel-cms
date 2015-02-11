@@ -4,7 +4,9 @@
 $tabla = $config['tabla'];
 $campos = $config['campos'];
 $botones = $config['botones'];
-$relaciones = $config['relaciones'];
+if (isset($config['relaciones'])) {
+    $relaciones = $config['relaciones'];
+}
 $identificador = $config['id'];
 $url = $config['url'];
 

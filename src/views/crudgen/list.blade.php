@@ -6,7 +6,9 @@
 $tabla = $config['tabla'];
 $campos = $config['campos'];
 $botones = $config['botones'];
-$relaciones = $config['relaciones'];
+if (isset($config['relaciones'])) {
+    $relaciones = $config['relaciones'];
+}
 
 if ($config['render']=="all"){
     $selects = array('column_name as field', 'column_type as type', 'is_nullable as null', 'column_key as key', 'column_default as default', 'extra as extra');
