@@ -9,5 +9,5 @@ if ($dato == ""){
     }
 }
 ?>
-{{ Form::label($columna->field, ucfirst($datos['label'])) }}
+{{ Form::label($columna, ucfirst($datos['label'])) }}
 {{ Form::select($columna, $datos["todos"], $dato, array('class' => 'form-control', 'id' => $tabla . '_' . $columna)) }}
