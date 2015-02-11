@@ -10,9 +10,16 @@ if ($dato == "") {
 ?>
 @if (is_array($datos['valor']))
 @foreach($datos['valor'] as $valor)
+<?php
+if (stripos($valor['valor'],$dato)===false){
+    $checked = false;
+}else{
+    $checked = true;
+}
+?>
 <div class="checkbox">
     <label>
-        {{ Form::checkbox($columna, $valor['valor'], $dato, array('class' => 'form-control', 'id' => $tabla . '_' . $columna . '_' . $valor['valor'])) }}
+        {{ Form::checkbox($columna, $valor['valor'], array('class' => 'form-control', 'id' => $tabla . '_' . $columna . '_' . $valor['valor']),$checked) }}
     </label>
     {{ $valor['label'] }}
     <span class="help-block" id="{{ $tabla . '_' . $columna . '_' . $valor['valor'] }}_help">
@@ -23,9 +30,16 @@ if ($dato == "") {
 </div>
 @endforeach
 @else
+<?php
+if ($datos['valor']==$dato){
+    $checked = true;
+}else{
+    $checked = false;
+}
+?>
 <div class="checkbox">
     <label>
-        {{ Form::checkbox($columna, $datos['valor'], $dato, array('class' => 'form-control', 'id' => $tabla . '_' . $columna)) }}
+        {{ Form::checkbox($columna, $datos['valor'], array('class' => 'form-control', 'id' => $tabla . '_' . $columna),$checked) }}
     </label>
     {{ $datos['label'] }}
     <span class="help-block" id="{{ $tabla . '_' . $columna }}_help">
