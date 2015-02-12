@@ -1,4 +1,11 @@
+@if (Session::has('message'))
+<div class="alert alert-info">{{ Session::pull('message') }}</div>
+@endif
+@if (count($errors->all())>0)
+<div class="alert alert-danger">
 {{ HTML::ul($errors->all()) }}
+</div>
+@endif
 <?php
 $tabla = $config['tabla'];
 $campos = $config['campos'];
