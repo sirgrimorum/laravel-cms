@@ -1,7 +1,7 @@
 @if (Session::has('message'))
 <div class="alert alert-info">{{ Session::pull('message') }}</div>
 @endif
-{{ HTML::ul($errors->all()) }}
+{{ HTML::ul($errors->all('<div class="alert alert-info">:message</div>')) }}
 <?php
 $tabla = $config['tabla'];
 $campos = $config['campos'];
