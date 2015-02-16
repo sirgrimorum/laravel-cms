@@ -1,6 +1,7 @@
 @if (Session::has('message'))
 <div class="alert alert-info">{{ Session::pull('message') }}</div>
 @endif
+<?php $errores = false ?>
 @if (count($errors->all())>0)
 <?php $errores = true ?>
 @if (isset($config['render']))
