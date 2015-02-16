@@ -77,12 +77,10 @@ if (isset($config['render'])){
             <td>
                 @if (is_array($botones))
                 @foreach ($botones as $boton)
-                {{ str_replace("{ID}",$value[$identificador],$boton) }}
-                {{ str_replace(htmlentities("{ID}"),$value[$identificador],$boton) }}
+                {{ str_replace("{ID}",$value[$identificador],str_replace(urlencode ("{ID}"),$value[$identificador],$boton)) }}
                 @endforeach
                 @else
-                {{ str_replace("{ID}",$value[$identificador],$botones) }}
-                {{ str_replace(htmlentities("{ID}"),$value[$identificador],$botones) }}
+                {{ str_replace("{ID}",$value[$identificador],str_replace(urlencode ("{ID}"),$value[$identificador],$botones)) }}
                 @endif
             </td>
             @endif
