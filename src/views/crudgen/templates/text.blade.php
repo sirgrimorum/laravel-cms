@@ -18,7 +18,7 @@ if ($errores == true) {
 }
 ?>
 <div class="form-group">
-    {{ Form::label($columna, ucfirst($datos['label'], array('class'=>$config['class_label']))) }}
+    {{ Form::label($columna, ucfirst($datos['label']), array('class'=>$config['class_label'])) }}
     <div class="{{ $config['class_divinput'] }}">
         @if ($error_campo)
         <div class="alert alert-danger">
