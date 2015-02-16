@@ -7,17 +7,16 @@ if ($dato == "") {
         $dato = "";
     }
 }
+$error_campo = false;
+$claseError = '';
 if ($errores == true) {
     if ($errors->has($columna)) {
         $error_campo = true;
         $claseError = 'has-error';
-    } else {
-        $error_campo = false;
-        $claseError = '';
-    }
+    } 
 }
 ?>
-<div class="form-group">
+<div class="form-group {{ $claseError }}">
     {{ Form::label($columna, ucfirst($datos['label']), array('class'=>$config['class_label'])) }}
     <div class="{{ $config['class_divinput'] }}">
         @if ($error_campo)

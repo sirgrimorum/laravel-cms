@@ -7,17 +7,16 @@ if ($dato == "") {
         $dato = "";
     }
 }
+$error_campo = false;
+$claseError = '';
 if ($errores == true) {
     if ($errors->has($columna)) {
         $error_campo = true;
         $claseError = 'has-error';
-    } else {
-        $error_campo = false;
-        $claseError = '';
-    }
+    } 
 }
 ?>
-<div class="form-group">
+<div class="form-group {{ $claseError }}">
     <div class="{{ $config['class_offset'] }} {{ $config['class_divinput'] }}">
         @if (is_array($datos['valor']))
         @foreach($datos['valor'] as $valor=>$datos2)
