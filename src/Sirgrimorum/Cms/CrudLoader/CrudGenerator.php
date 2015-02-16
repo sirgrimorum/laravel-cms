@@ -60,7 +60,7 @@ class CrudGenerator {
             $registro = $modeloM::find($id);
         }
 
-        $view = View::make('cms::crugen.show', array('config' => $config, 'registro' => $registro));
+        $view = View::make('cms::crudgen.show', array('config' => $config, 'registro' => $registro));
         return $view->render();
     }
 
