@@ -52,7 +52,9 @@ if (isset($config['render'])) {
     foreach ($table_describes as $key => $columna) {
         echo '<div class="form-group">';
         if (array_key_exists($columna->field, $campos)) {
-            include("cms::crud.templates." . array_get($campos, $columna->field . ".tipo"));
+            ?>
+            @include("cms::crud.templates." . array_get($campos, $columna->field . ".tipo"));
+            <?php
         } elseif (stripos($columna->type, "text") !== false) {
             echo Form::label($columna->field, ucfirst($columna->field), array('class'=>$config['class_label']));
             echo '<div class="' . $config['class_divinput'] . '">';
@@ -74,9 +76,13 @@ if (isset($config['render'])) {
 } else {
     foreach ($campos as $columna => $datos) {
         if (View::exists("cms::crudgen.templates." . $datos['tipo'])) {
-            include("cms::crudgen.templates." . $datos['tipo']);
+            ?>
+            @include("cms::crudgen.templates." . $datos['tipo']);
+            <?php
         } else {
-            include("cms::crudgen.templates.text");
+            ?>
+            @include("cms::crudgen.templates.text");
+            <?php
         }
     }
 }
