@@ -10,6 +10,7 @@
 $tabla = $config['tabla'];
 $campos = $config['campos'];
 $botones = $config['botones'];
+$nombre = $config['nombre'];
 if (isset($config['relaciones'])) {
     $relaciones = $config['relaciones'];
 }
