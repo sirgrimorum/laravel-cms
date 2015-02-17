@@ -55,7 +55,7 @@ if (isset($config['render'])){
                 @if (array_key_exists($columna->field,$campos))
                     @include("cms::crud.templates." . array_get($campos,$columna->field . ".tipo"))
                 @elseif ($columna->type == "text")
-                    {{ Form::label($columna->field, ucfirst($columna->field), array('class'=>$config['class_label']) }}
+                    {{ Form::label($columna->field, ucfirst($columna->field), array('class'=>$config['class_label'])) }}
                     {{ Form::textarea($columna->field, $registro->{$columna->field}, array('class' => 'form-control ' . $config['class_input'])) }}
                 @elseif (isset($relaciones[$columna->field]))
                     {{ Form::label($columna->field, ucfirst($columna->field), array('class'=>$config['class_label'])) }}
