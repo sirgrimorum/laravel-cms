@@ -53,7 +53,7 @@ if (isset($config['render'])){
                 <br>
             @elseif ($datos['tipo']=="select")
                 <strong>{{ ucfirst($datos['label']) }}: </strong>
-                {{ $datos['opciones'][$registro->{$column}] }}
+                {{ $datos['opciones'][$registro->{$columna}] }}
                 <br>
             @else
                 <strong>{{ ucfirst($datos['label']) }}:</strong> {{ $registro->{$columna} }}<br>
