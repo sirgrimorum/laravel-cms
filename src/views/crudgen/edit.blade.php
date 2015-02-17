@@ -58,10 +58,10 @@ if (isset($config['render'])){
                     {{ Form::label($columna->field, ucfirst($columna->field), array('class'=>$config['class_label']) }}
                     {{ Form::textarea($columna->field, $registro->{$columna->field}, array('class' => 'form-control ' . $config['class_input'])) }}
                 @elseif (isset($relaciones[$columna->field]))
-                    {{ Form::label($columna->field, ucfirst($columna->field), array('class'=>$config['class_label']) }}
+                    {{ Form::label($columna->field, ucfirst($columna->field), array('class'=>$config['class_label'])) }}
                     {{ Form::select($columna->field, $relaciones[$columna->field]["todos"], $registro->{$columna->field}, array('class' => 'form-control ' . $config['class_input'])) }}
                 @elseif ($columna->field != "created_at" && $columna->field != "updated_at" && $columna->key != "PRI")
-                    {{ Form::label($columna->field, ucfirst($columna->field), array('class'=>$config['class_label']) }}
+                    {{ Form::label($columna->field, ucfirst($columna->field), array('class'=>$config['class_label'])) }}
                     {{ Form::text($columna->field, $registro->{$columna->field}, array('class' => 'form-control ' . $config['class_input'])) }}
                 @endif
             </div>
