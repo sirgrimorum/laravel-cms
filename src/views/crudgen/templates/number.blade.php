@@ -1,10 +1,14 @@
 <?php
-$dato = Input::old($columna);
-if ($dato == "") {
-    try {
-        $dato = $registro->{$columna};
-    } catch (Exception $ex) {
-        $dato = "";
+if (isset($datos["valor"])) {
+    $dato = $datos["valor"];
+} else {
+    $dato = Input::old($columna);
+    if ($dato == "") {
+        try {
+            $dato = $registro->{$columna};
+        } catch (Exception $ex) {
+            $dato = "";
+        }
     }
 }
 $error_campo = false;
@@ -24,7 +28,15 @@ if ($errores == true) {
             {{ HTML::ul($errors->get($columna)) }}
         </div>
         @endif
-        {{ Form::number($columna, $dato, array('class' => 'form-control ' . $config['class_input'], 'id' => $tabla . '_' . $columna, 'placeholder'=>$datos['placeholder'])) }}
+        <div class="input-group">
+            @if (isset($datos["pre"]))
+                <div class="input-group-addon">{{ $datos["pre"] }}</div>
+            @endif
+            {{ Form::number($columna, $dato, array('class' => 'form-control ' . $config['class_input'], 'id' => $tabla . '_' . $columna, 'placeholder'=>$datos['placeholder'])) }}
+            @if (isset($datos["post"]))
+                <div class="input-group-addon">{{ $datos["post"] }}</div>
+            @endif
+        </div>
         <span class="help-block" id="{{ $tabla . '_' . $columna }}_help">
             @if (isset($datos['description']))
             {{ $datos['description'] }}

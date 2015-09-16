@@ -1,4 +1,6 @@
-<?php namespace Sirgrimorum\Cms;
+<?php
+
+namespace Sirgrimorum\Cms;
 
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
@@ -15,6 +17,7 @@ use Symfony\Component\HttpFoundation\File\File as SFile;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Sirgrimorum\Cms;
+
 class CrudController extends Controller {
 
     protected $tabla = 'articles';
@@ -27,20 +30,22 @@ class CrudController extends Controller {
     public function index() {
         $modeloM = ucfirst($this->modelo);
         $registros = $modeloM::all();
-        $auxarr_modelo=explode("\\",$this->modelo);
+        $auxarr_modelo = explode("\\", $this->modelo);
         return View::make('cms::crud.index', array('tabla' => $this->tabla, 'modelo' => array_pop($auxarr_modelo), 'plural' => $this->plural, 'registros' => $registros, 'relaciones' => $this->relaciones, 'identificador' => $this->id, 'base_url' => Config::get('cms::admin_prefix')));
     }
-    
-     public function create() {
+
+    public function create() {
         foreach ($this->relaciones as $clave => $relacion) {
-            $lista = array("-" => "-");
-            $modeloM = ucfirst($relacion["modelo"]);
-            foreach ($modeloM::all() as $elemento) {
-                $lista[$elemento->{$relacion['id']}] = $elemento->{$relacion['nombre']};
+            if (!is_array($this->relaciones[$clave]['todos'])) {
+                $lista = array("-" => "-");
+                $modeloM = ucfirst($relacion["modelo"]);
+                foreach ($modeloM::all() as $elemento) {
+                    $lista[$elemento->{$relacion['id']}] = $elemento->{$relacion['nombre']};
+                }
+                $this->relaciones[$clave]['todos'] = $lista;
             }
-            $this->relaciones[$clave]['todos'] = $lista;
         }
-        $auxarr_modelo=explode("\\",$this->modelo);
+        $auxarr_modelo = explode("\\", $this->modelo);
         return View::make('cms::crud.create', array('tabla' => $this->tabla, 'modelo' => array_pop($auxarr_modelo), 'plural' => $this->plural, 'relaciones' => $this->relaciones, 'campos' => $this->campos, 'base_url' => Config::get('cms::admin_prefix')));
     }
 
@@ -82,7 +87,7 @@ class CrudController extends Controller {
         $modeloM = ucfirst($this->modelo);
         $registro = $modeloM::find($id);
 
-        $auxarr_modelo=explode("\\",$this->modelo);
+        $auxarr_modelo = explode("\\", $this->modelo);
         return View::make('cms::crud.show', array('tabla' => $this->tabla, 'modelo' => array_pop($auxarr_modelo), 'plural' => $this->plural, 'registro' => $registro, 'relaciones' => $this->relaciones, 'nombre' => $this->nombre, 'base_url' => Config::get('cms::admin_prefix')));
     }
 
@@ -98,7 +103,7 @@ class CrudController extends Controller {
         $modeloM = ucfirst($this->modelo);
         $registro = $modeloM::find($id);
 
-        $auxarr_modelo=explode("\\",$this->modelo);
+        $auxarr_modelo = explode("\\", $this->modelo);
         return View::make('cms::crud.edit', array('tabla' => $this->tabla, 'modelo' => array_pop($auxarr_modelo), 'plural' => $this->plural, 'registro' => $registro, 'relaciones' => $this->relaciones, 'nombre' => $this->nombre, 'id' => $this->id, 'campos' => $this->campos, 'base_url' => Config::get('cms::admin_prefix')));
     }
 

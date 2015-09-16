@@ -24,22 +24,53 @@ class CrudGenerator {
     function create($config) {
         if (isset($config['render'])) {
             foreach ($config['relaciones'] as $clave => $relacion) {
-                $lista = array("-" => "-");
-                $modeloM = ucfirst($relacion["modelo"]);
-                foreach ($modeloM::all() as $elemento) {
-                    $lista[$elemento->{$relacion['id']}] = $elemento->{$relacion['nombre']};
-                }
-                $config['relaciones'][$clave]['todos'] = $lista;
-            }
-        } else {
-            foreach ($config['campos'] as $clave => $relacion) {
-                if ($relacion['tipo'] == "relationship") {
+                if (!is_array($relacion['todos'])) {
                     $lista = array("-" => "-");
                     $modeloM = ucfirst($relacion["modelo"]);
                     foreach ($modeloM::all() as $elemento) {
-                        $lista[$elemento->{$relacion['id']}] = $elemento->{$relacion['campo']};
+                        if (is_array($relacion['nombre'])) {
+                            $strNombre = "";
+                            $preNombre = "";
+                            foreach ($relacion['nombre'] as $nombreRelacion) {
+                                $strNombre .= $preNombre . $elemento->{$nombreRelacion};
+                                $preNombre = ", ";
+                            }
+                            $lista[$elemento->{$relacion['id']}] = $strNombre;
+                        } else {
+                            $lista[$elemento->{$relacion['id']}] = $elemento->{$relacion['nombre']};
+                        }
                     }
-                    $config['campos'][$clave]['todos'] = $lista;
+                    $config['relaciones'][$clave]['todos'] = $lista;
+                }
+            }
+        } else {
+            foreach ($config['campos'] as $clave => $relacion) {
+                if ($relacion['tipo'] == "relationship" || $relacion['tipo'] == "relationships") {
+                    if (!is_array($config['campos'][$clave]['todos'])) {
+                        if ($relacion['tipo'] == "relationship") {
+                            $lista = array("-" => "-");
+                        }
+                        if ($config['campos'][$clave]['todos'] == ""){
+                            $modeloM = ucfirst($relacion["modelo"]);
+                            $modelosM = $modeloM::all();
+                        }else{
+                            $modelosM = $config['campos'][$clave]['todos'];
+                        }
+                        foreach ($modelosM as $elemento) {
+                            if (is_array($relacion['campo'])) {
+                                $strNombre = "";
+                                $preNombre = "";
+                                foreach ($relacion['campo'] as $nombreRelacion) {
+                                    $strNombre .= $preNombre . $elemento->{$nombreRelacion};
+                                    $preNombre = ", ";
+                                }
+                                $lista[$elemento->{$relacion['id']}] = $strNombre;
+                            } else {
+                                $lista[$elemento->{$relacion['id']}] = $elemento->{$relacion['campo']};
+                            }
+                        }
+                        $config['campos'][$clave]['todos'] = $lista;
+                    }
                 }
             }
         }

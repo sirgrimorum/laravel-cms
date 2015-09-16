@@ -5,7 +5,10 @@ if (isset($datos["valor"])) {
     $dato = Input::old($columna);
     if ($dato == "") {
         try {
-            $dato = $registro->{$columna};
+            $dato = [];
+            foreach ($registro->{$columna}()->get() as $elemento){
+                $dato[$elemento->id]=$elemento->id;
+            }
         } catch (Exception $ex) {
             $dato = "";
         }
@@ -28,7 +31,7 @@ if ($errores == true) {
             {{ HTML::ul($errors->get($columna)) }}
         </div>
         @endif
-        {{ Form::select($columna, $datos['opciones'], $dato, array('class' => 'form-control ' . $config['class_input'], 'id' => $tabla . '_' . $columna)) }}
+        {{ Form::select($columna . "[]", $datos["todos"], $dato, array('multiple'=>'multiple','class' => 'form-control ' . $config['class_input'], 'id' => $tabla . '_' . $columna)) }}
         <span class="help-block" id="{{ $tabla . '_' . $columna }}_help">
             @if (isset($datos['description']))
             {{ $datos['description'] }}

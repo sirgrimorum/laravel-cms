@@ -4,17 +4,20 @@
 <?php $errores = false ?>
 @if (count($errors->all())>0)
 <?php $errores = true ?>
-@if (isset($config['render']))
 <div class="alert alert-danger">
     {{ HTML::ul($errors->all()) }}
 </div>
-@endif
 @endif
 
 <?php
 $tabla = $config['tabla'];
 $campos = $config['campos'];
 $botones = $config['botones'];
+if (isset($config['files'])) {
+    $files = $config['files'];
+}else{
+    $files = false;
+}
 if (isset($config['relaciones'])) {
     $relaciones = $config['relaciones'];
 }
@@ -47,7 +50,7 @@ if (isset($config['render'])) {
     }
 }
 
-echo Form::open(array('url' => $url, 'class' => $config['class_form']));
+echo Form::open(array('url' => $url, 'class' => $config['class_form'], 'files'=> $files));
 
 if (isset($config['render'])) {
     foreach ($table_describes as $key => $columna) {
@@ -92,14 +95,22 @@ if (count($botones) > 0) {
         echo '<div class="form-group">';
         foreach ($botones as $boton) {
             echo '<div class="' . $config['class_offset'] . ' ' . $config['class_divinput'] . '">';
-            echo Form::submit($boton, array('class' => 'btn btn-primary'));
+             if (strpos($boton, "<") === false) {
+                echo Form::submit($boton, array('class' => 'btn btn-primary'));
+            } else {
+                echo $boton;
+            }
             echo '</div>';
         }
         echo '</div>';
     } else {
         echo '<div class="form-group">';
         echo '<div class="' . $config['class_offset'] . ' ' . $config['class_divinput'] . '">';
-        echo Form::submit($botones, array('class' => 'btn btn-primary'));
+        if (strpos($botones, "<") === false) {
+            echo Form::submit($botones, array('class' => 'btn btn-primary'));
+        } else {
+            echo $botones;
+        }
         echo '</div>';
         echo '</div>';
     }

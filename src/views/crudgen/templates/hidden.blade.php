@@ -1,6 +1,6 @@
 <?php
-if (isset($columna["valor"])){
-    $dato = $columna["valor"];
+if (isset($datos["valor"])){
+    $dato = $datos["valor"];
 }else{
     $dato = Input::old($columna);
     if ($dato == ""){

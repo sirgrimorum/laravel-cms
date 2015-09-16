@@ -9,7 +9,15 @@
 <?php
 $tabla = $config['tabla'];
 $campos = $config['campos'];
-$botones = $config['botones'];
+if (isset($config['botones'])) {
+    if ($config['botones'] != "") {
+        $botones = $config['botones'];
+    } else {
+        $botones = [];
+    }
+}else{
+    $botones = [];
+}
 if (isset($config['relaciones'])) {
     $relaciones = $config['relaciones'];
 }
@@ -42,6 +50,9 @@ if (isset($config['render'])){
             @foreach($campos as $columna => $datos)
                 <th>{{ ucfirst($datos['label']) }}</th>
             @endforeach
+            @if (count($botones)>0)
+                <th></th>
+            @endif
         @endif
         </tr>
     </thead>
@@ -62,15 +73,111 @@ if (isset($config['render'])){
             @endforeach
         @else
             @foreach($campos as $columna => $datos)
+                <td>
+                    @if (isset($datos["pre"]))
+                        {{ $datos["pre"] }}
+                    @endif
                 @if ($datos['tipo']=="relationship")
                     @if (count($value->{$datos['modelo']}))
-                        <td>{{ $value->{$datos['modelo']}->{$datos['campo']} }}</td>
+                            @if(array_key_exists('enlace',$datos))
+                            <a href="{{ str_replace("{ID}",$value->{$datos['modelo']}->{$datos['id']},str_replace(urlencode ("{ID}"),$value->{$datos['modelo']}->{$datos['id']},$datos['enlace'])) }}">
+                            @endif
+                            {{ $value->{$datos['modelo']}->{$datos['campo']} }}
+                            @if(array_key_exists('enlace',$datos))
+                            </a>
+                            @endif
+                    @elseif (count($value->{$columna}))
+                            @if(array_key_exists('enlace',$datos))
+                            <a href="{{ str_replace("{ID}",$value->{$columna}->{$datos['id']},str_replace(urlencode ("{ID}"),$value->{$columna}->{$datos['id']},$datos['enlace'])) }}">
+                            @endif
+                            {{ $value->{$columna}->{$datos['campo']} }}
+                            @if(array_key_exists('enlace',$datos))
+                            </a>
+                            @endif
                     @else
-                        <td>-</td>
+                        -
+                    @endif
+                @elseif ($datos['tipo']=="relationships")
+                    @if (count($value->{$columna}()->get())>0)
+                        @foreach($value->{$columna}()->get() as $sub)
+                                <p>
+                                    @if(array_key_exists('enlace',$datos))
+                                    <a href="{{ str_replace("{ID}",$sub->{$datos['id']},str_replace(urlencode ("{ID}"),$sub->{$datos['id']},$datos['enlace'])) }}">
+                                    @endif
+                                    {{ $sub->{$datos['campo']} }}
+                                    @if(array_key_exists('enlace',$datos))
+                                    </a>
+                                    @endif
+                                </p>
+                        @endforeach
+                    @else
+                        -
+                    @endif
+                @elseif ($datos['tipo']=="select")
+                    @if (array_key_exists($value->{$columna},$datos['opciones']))
+                        {{ $datos['opciones'][$value->{$columna}] }}
+                    @else
+                        -
+                    @endif
+                @elseif ($datos['tipo']=="function")
+                    @if (isset($datos['format']))
+                        @if (is_array($datos['format']))
+                            {{ number_format($value->{$columna}(),$datos['format'][0],$datos['format'][1],$datos['format'][2]) }}
+                        @else
+                            {{ number_format($value->{$columna}()) }}
+                        @endif
+                    @else            
+                        {{ $value->{$columna}() }}
+                    @endif
+                @elseif ($datos['tipo']=="url")
+                    <a href='{{ $value->{$columna} }}' target='_blank'>{{ $value->{$columna} }}</a>
+                @elseif ($datos['tipo']=="file")
+                    @if (isset($datos['pathImage']))
+                            @if ($value->{$columna} == "" )
+                                -
+                            @else
+                                @if (isset($datos['enlace']))
+                                    <a href='{{ str_replace("{value}", $value->{$columna}, $datos['enlace'] ) }}' target="_blank">
+                                @endif
+                                    <image class="img-responsive" src="{{ asset('/images/' . $datos['pathImage'] . $value->{$columna} ) }}" alt="{{ $columna }}"/>
+                                @if (isset($datos['enlace']))
+                                    </a>
+                                @endif
+                            @endif
+                    @else
+                            @if ($value->{$columna} == "" )
+                                -
+                            @else
+                                @if (isset($datos['enlace']))
+                                    <a href='{{ str_replace("{value}", $value->{$columna}, $datos['enlace'] ) }}' target="_blank">
+                                @endif
+                                    {{ $value->{$columna} }}
+                                @if (isset($datos['enlace']))
+                                    </a>
+                                @endif
+                            @endif
                     @endif
                 @else
-                    <td>{{ $value->{$columna} }}</td>
+                    @if(array_key_exists('enlace',$datos))
+                        <a href="{{ str_replace("{ID}",$value->{$identificador},str_replace(urlencode ("{ID}"),$value->{$identificador},$datos['enlace'])) }}">
+                    @endif
+                    @if ($datos['tipo']=="number" && isset($datos['format']))
+                        @if (is_array($datos['format']))
+                            {{ number_format($value->{$columna},$datos['format'][0],$datos['format'][1],$datos['format'][2]) }}
+                        @else
+                            {{ number_format($value->{$columna}) }}
+                        @endif
+                    @else            
+                        {{ $value->{$columna} }}
+                    @endif
+                    @if(array_key_exists('enlace',$datos))
+                        </a>
+                    @endif
                 @endif
+                @if (isset($datos["post"]))
+                    {{ " " . $datos["post"] }}
+                @endif
+                </td>
             @endforeach
         @endif
             @if (count($botones)>0)
@@ -90,6 +197,7 @@ if (isset($config['render'])){
 </table>
 
 @section("selfcss")
+@parent
 {{ HTML::style("packages/sirgrimorum/cms/css/jquery.dataTables.min.css") }}
 {{ HTML::style("packages/sirgrimorum/cms/css/dataTables.bootstrap.css") }}
 {{ HTML::style("packages/sirgrimorum/cms/css/dataTables.colReorder.min.css") }}
@@ -99,6 +207,7 @@ if (isset($config['render'])){
 @stop
 
 @section("selfjs")
+@parent
 {{ HTML::script("packages/sirgrimorum/cms/js/jquery.dataTables.min.js") }}
 {{ HTML::script("packages/sirgrimorum/cms/js/dataTables.bootstrap.js") }}
 {{ HTML::script("packages/sirgrimorum/cms/js/dataTables.colReorder.min.js") }}
@@ -114,7 +223,7 @@ if (isset($config['render'])){
             sSwfPath: "/swf/copy_csv_xls_pdf.swf"
             }
         });
-        new $.fn.dataTable.FixedHeader(lista_{{ $tabla }});
+        //new $.fn.dataTable.FixedHeader(lista_{{ $tabla }});
     });
 </script>
 @stop

@@ -1,10 +1,14 @@
 <?php
-$dato = Input::old($columna);
-if ($dato == "") {
-    try {
-        $dato = $registro->{$columna};
-    } catch (Exception $ex) {
-        $dato = "";
+if (isset($datos["valor"])) {
+    $dato = $datos["valor"];
+} else {
+    $dato = Input::old($columna);
+    if ($dato == "") {
+        try {
+            $dato = $registro->{$columna};
+        } catch (Exception $ex) {
+            $dato = "";
+        }
     }
 }
 $error_campo = false;
@@ -29,7 +33,7 @@ if ($errores == true) {
         ?>
         <div class="checkbox">
             <label>
-                {{ Form::checkbox($columna, $valor, array('class' => 'form-control', 'id' => $tabla . '_' . $columna . '_' . $valor),$checked) }}
+                {{ Form::checkbox($columna, $valor, $checked, array('class' => 'form-control', 'id' => $tabla . '_' . $columna . '_' . $valor)) }}
                 {{ $datos2['label'] }}
             </label>
             <span class="help-block" id="{{ $tabla . '_' . $columna . '_' . $valor }}_help">
@@ -41,7 +45,7 @@ if ($errores == true) {
         @endforeach
         @else
         <?php
-        if ($datos['valor'] == $dato) {
+        if ($datos['value'] == $dato) {
             $checked = true;
         } else {
             $checked = false;
@@ -49,7 +53,7 @@ if ($errores == true) {
         ?>
         <div class="checkbox">
             <label>
-                {{ Form::checkbox($columna, $datos['valor'], array('class' => 'form-control', 'id' => $tabla . '_' . $columna),$checked) }}
+                {{ Form::checkbox($columna, $datos['value'],$checked, array('class' => 'form-control', 'id' => $tabla . '_' . $columna)) }}
                 {{ $datos['label'] }}
             </label>
             <span class="help-block" id="{{ $tabla . '_' . $columna }}_help">

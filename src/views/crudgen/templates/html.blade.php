@@ -1,10 +1,14 @@
 <?php
-$dato = Input::old($columna);
-if ($dato == "") {
-    try {
-        $dato = $registro->{$columna};
-    } catch (Exception $ex) {
-        $dato = "";
+if (isset($datos["valor"])) {
+    $dato = $datos["valor"];
+} else {
+    $dato = Input::old($columna);
+    if ($dato == "") {
+        try {
+            $dato = $registro->{$columna};
+        } catch (Exception $ex) {
+            $dato = "";
+        }
     }
 }
 $error_campo = false;
@@ -34,6 +38,7 @@ if ($errores == true) {
 </div>
 
 @section('selfjs')
+@parent
 {{ HTML::script("//cdn.ckeditor.com/4.4.5/full/ckeditor.js") }}
 <script>
     $(document).ready(function() {

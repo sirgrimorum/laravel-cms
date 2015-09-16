@@ -4,16 +4,19 @@
 <?php $errores = false ?>
 @if (count($errors->all())>0)
 <?php $errores = true ?>
-@if (isset($config['render']))
 <div class="alert alert-danger">
     {{ HTML::ul($errors->all()) }}
 </div>
-@endif
 @endif
 <?php
 $tabla = $config['tabla'];
 $campos = $config['campos'];
 $botones = $config['botones'];
+if (isset($config['files'])) {
+    $files = $config['files'];
+}else{
+    $files = false;
+}
 if (isset($config['relaciones'])) {
     $relaciones = $config['relaciones'];
 }
@@ -48,7 +51,7 @@ if (isset($config['render'])){
 }
 
 ?>
-{{ Form::model($registro, array('url' => array($url, $registro->{$identificador}, 'class' => $config['class_form']), 'method' => 'PUT')) }}
+{{ Form::model($registro, array('url' => array($url, $registro->{$identificador}, 'class' => $config['class_form']), 'method' => 'PUT', 'files'=> $files)) }}
     @if (isset($config['render']))
         @foreach($table_describes as $key => $columna)
             <div class="form-group">
@@ -80,14 +83,22 @@ if (isset($config['render'])){
         <div class="form-group">
         @foreach ($botones as $boton)
             <div class="{{ $config['class_offset'] }} {{ $config['class_divinput'] }}">
-            {{ Form::submit($boton, array('class' => 'btn btn-primary')) }}
+            @if (strpos($boton,"<")===false)
+                {{ Form::submit($boton, array('class' => 'btn btn-primary')) }}
+            @else
+                {{ $boton }}
+            @endif
             </div>
         @endforeach
         </div>
         @else
             <div class="form-group">
                 <div class="{{ $config['class_offset'] }} {{ $config['class_divinput'] }}">
-                    {{ Form::submit($botones, array('class' => 'btn btn-primary')) }}
+                    @if (strpos($botones,"<")===false)
+                        {{ Form::submit($botones, array('class' => 'btn btn-primary')) }}
+                    @else
+                        {{ $botones }}
+                    @endif
                 </div>
             </div>
         @endif
