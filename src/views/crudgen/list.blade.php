@@ -139,7 +139,11 @@ if (isset($config['render'])){
                                 @if (isset($datos['enlace']))
                                     <a href='{{ str_replace("{value}", $value->{$columna}, $datos['enlace'] ) }}' target="_blank">
                                 @endif
+                                @if (preg_match('/(\.jpg|\.png|\.bmp)$/', $value->{$columna}))
                                     <image class="img-responsive" src="{{ asset('/images/' . $datos['pathImage'] . $value->{$columna} ) }}" alt="{{ $columna }}"/>
+                                @else
+                                    <image class="img-responsive" src="{{ asset('/images/img/file.png' ) }}" alt="{{ $columna }}"/>
+                                @endif
                                 @if (isset($datos['enlace']))
                                     </a>
                                 @endif
