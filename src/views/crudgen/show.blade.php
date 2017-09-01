@@ -30,7 +30,6 @@ if (isset($config['render'])){
 ?>
 <div class="jumbotron text-center">
     <h2>{{ $registro->{$nombre} }}</h2>
-    <p>
     @if (isset($config['render']))
         @foreach($table_describes as $key => $columna)
         @if (isset($relaciones[$columna->field]))
@@ -54,7 +53,17 @@ if (isset($config['render'])){
                     @if(array_key_exists('enlace',$datos))
                         <a href="{{ str_replace("{ID}",$registro->{$datos['modelo']}->{$datos['id']},str_replace(urlencode ("{ID}"),$registro->{$datos['modelo']}->{$datos['id']},$datos['enlace'])) }}">
                     @endif
+                    @if(is_array($datos['campo']))
+                    <?php
+                    $prefijoCampo = "";
+                    foreach($datos['campo'] as $campo){
+                        echo $prefijoCampo . $registro->{$datos['modelo']}->{$campo};
+                        $prefijoCampo = ", ";
+                    }
+                    ?>
+                    @else
                     {{ $registro->{$datos['modelo']}->{$datos['campo']} }}
+                    @endif
                     @if(array_key_exists('enlace',$datos))
                         </a>
                     @endif
@@ -62,7 +71,17 @@ if (isset($config['render'])){
                     @if(array_key_exists('enlace',$datos))
                         <a href="{{ str_replace("{ID}",$registro->{$columna}->{$datos['id']},str_replace(urlencode ("{ID}"),$registro->{$columna}->{$datos['id']},$datos['enlace'])) }}">
                     @endif
+                    @if(is_array($datos['campo']))
+                    <?php
+                    $prefijoCampo = "";
+                    foreach($datos['campo'] as $campo){
+                        echo $prefijoCampo . $registro->{$columna}->{$campo};
+                        $prefijoCampo = ", ";
+                    }
+                    ?>
+                    @else
                     {{ $registro->{$columna}->{$datos['campo']} }}
+                    @endif
                     @if(array_key_exists('enlace',$datos))
                         </a>
                     @endif
@@ -73,7 +92,17 @@ if (isset($config['render'])){
                         @if(array_key_exists('enlace',$datos))
                             <a href="{{ str_replace("{ID}",$sub->{$datos['id']},str_replace(urlencode ("{ID}"),$sub->{$datos['id']},$datos['enlace'])) }}">
                         @endif
+                        @if(is_array($datos['campo']))
+                        <?php
+                        $prefijoCampo = "";
+                        foreach($datos['campo'] as $campo){
+                            echo $prefijoCampo . $sub->{$campo};
+                            $prefijoCampo = ", ";
+                        }
+                        ?>
+                        @else
                         {{ $sub->{$datos['campo']} }}
+                        @endif
                         @if(array_key_exists('enlace',$datos))
                             </a>
                         @endif
@@ -142,5 +171,4 @@ if (isset($config['render'])){
             <br/>
         @endforeach
     @endif
-    </p>
 </div>

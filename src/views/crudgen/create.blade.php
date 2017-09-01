@@ -15,27 +15,27 @@ $campos = $config['campos'];
 $botones = $config['botones'];
 if (isset($config['files'])) {
     $files = $config['files'];
-}else{
+} else {
     $files = false;
 }
 if (isset($config['relaciones'])) {
     $relaciones = $config['relaciones'];
 }
 $url = $config['url'];
-if (! isset($config['class_form'])) {
-    $config['class_form']='form-horizontal';
+if (!isset($config['class_form'])) {
+    $config['class_form'] = 'form-horizontal';
 }
-if (! isset($config['class_label'])) {
-    $config['class_label']='col-xs-12 col-sm-4 col-md-2';
+if (!isset($config['class_label'])) {
+    $config['class_label'] = 'col-xs-12 col-sm-4 col-md-2';
 }
-if (! isset($config['class_divinput'])) {
-    $config['class_divinput']='col-xs-12 col-sm-8 col-md-10';
+if (!isset($config['class_divinput'])) {
+    $config['class_divinput'] = 'col-xs-12 col-sm-8 col-md-10';
 }
-if (! isset($config['class_input'])) {
-    $config['class_input']='';
+if (!isset($config['class_input'])) {
+    $config['class_input'] = '';
 }
-if (! isset($config['class_offset'])) {
-    $config['class_offset']='col-xs-offset-0 col-sm-offset-4 col-md-offset-2';
+if (!isset($config['class_offset'])) {
+    $config['class_offset'] = 'col-xs-offset-0 col-sm-offset-4 col-md-offset-2';
 }
 
 if (isset($config['render'])) {
@@ -50,27 +50,27 @@ if (isset($config['render'])) {
     }
 }
 
-echo Form::open(array('url' => $url, 'class' => $config['class_form'], 'files'=> $files));
+echo Form::open(array('url' => $url, 'class' => $config['class_form'], 'files' => $files));
 
 if (isset($config['render'])) {
     foreach ($table_describes as $key => $columna) {
         echo '<div class="form-group">';
         if (array_key_exists($columna->field, $campos)) {
             ?>
-            @include("cms::crud.templates." . array_get($campos, $columna->field . ".tipo"))
+            @include("cms::crudgen.templates." . array_get($campos, $columna->field . ".tipo"))
             <?php
         } elseif (stripos($columna->type, "text") !== false) {
-            echo Form::label($columna->field, ucfirst($columna->field), array('class'=>$config['class_label']));
+            echo Form::label($columna->field, ucfirst($columna->field), array('class' => $config['class_label']));
             echo '<div class="' . $config['class_divinput'] . '">';
             echo Form::textarea($columna->field, Input::old($columna->field), array('class' => 'form-control ' . $config['class_input']));
             echo '</div>';
         } elseif (isset($relaciones[$columna->field])) {
-            echo Form::label($columna->field, ucfirst($columna->field), array('class'=>$config['class_label']));
+            echo Form::label($columna->field, ucfirst($columna->field), array('class' => $config['class_label']));
             echo '<div class="' . $config['class_divinput'] . '">';
             echo Form::select($columna->field, $relaciones[$columna->field]["todos"], Input::old($columna->field), array('class' => 'form-control ' . $config['class_input']));
             echo '</div>';
         } elseif ($columna->field != "created_at" && $columna->field != "updated_at" && $columna->key != "PRI") {
-            echo Form::label($columna->field, ucfirst($columna->field), array('class'=>$config['class_label']));
+            echo Form::label($columna->field, ucfirst($columna->field), array('class' => $config['class_label']));
             echo '<div class="' . $config['class_divinput'] . '">';
             echo Form::text($columna->field, Input::old($columna->field), array('class' => 'form-control ' . $config['class_input']));
             echo '</div>';
@@ -95,7 +95,7 @@ if (count($botones) > 0) {
         echo '<div class="form-group">';
         foreach ($botones as $boton) {
             echo '<div class="' . $config['class_offset'] . ' ' . $config['class_divinput'] . '">';
-             if (strpos($boton, "<") === false) {
+            if (strpos($boton, "<") === false) {
                 echo Form::submit($boton, array('class' => 'btn btn-primary'));
             } else {
                 echo $boton;

@@ -53,18 +53,17 @@ if (isset($datos["pre"])){
 <div class="form-group {{ $claseError }}">
     {{ Form::label($columna, ucfirst($datos['label']), array('class'=>$config['class_label'])) }}
     <div class="{{ $config['class_divinput'] }}">
-        @if ($error_campo)
-        <div class="alert alert-danger">
-            {{ HTML::ul($errors->get($columna)) }}
-        </div>
-        @endif
         {{ Form::text($columna, $dato, array('class' => 'form-control ' . $config['class_input'], 'id' => $tabla . '_' . $columna, 'data-slider-id'=>$tabla . '_' . $columna . 'Slider', 'data-slider-min'=>$min, 'data-slider-max'=>$max, 'data-slider-step'=>$step, 'data-slider-value'=>$dato ,$readonly)) }}
         <span class="help-block" id="{{ $tabla . '_' . $columna }}_help">
             @if (isset($datos['description']))
             {{ $datos['description'] }}
             @endif
         </span>
-    </div>
+        @if ($error_campo)
+        <div class="alert alert-danger">
+            {{ $errors->get($columna)[0] }}
+        </div>
+        @endif    </div>
 </div>
 
 @section('selfcss')
@@ -76,7 +75,7 @@ if (isset($datos["pre"])){
 {{ HTML::script("js/bootstrap-slider.js") }}
 <script>
     $(document).ready(function() {
-        $('#{{ $tabla . "_" . $columna }}').slider({
+        $('#{{ $tabla . "_" . $columna }}').sliderb({
             formatter:function(value){
                 return "{{ $pre }}" + value + "{{ $post }}";
             }

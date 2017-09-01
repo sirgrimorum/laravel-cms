@@ -8,6 +8,7 @@
 @endif
 <?php
 $tabla = $config['tabla'];
+$tablaid = $tabla . "_" . str_random(5);
 $campos = $config['campos'];
 if (isset($config['botones'])) {
     if ($config['botones'] != "") {
@@ -35,7 +36,7 @@ if (isset($config['render'])){
     }
 }
 ?>
-<table class="table table-striped table-bordered" id='list_{{ $tabla }}'>
+<table class="table table-striped table-bordered" id='list_{{ $tablaid }}'>
     <thead>
         <tr>
         @if (isset($config['render']))
@@ -82,7 +83,17 @@ if (isset($config['render'])){
                             @if(array_key_exists('enlace',$datos))
                             <a href="{{ str_replace("{ID}",$value->{$datos['modelo']}->{$datos['id']},str_replace(urlencode ("{ID}"),$value->{$datos['modelo']}->{$datos['id']},$datos['enlace'])) }}">
                             @endif
+                            @if(is_array($datos['campo']))
+                            <?php
+                            $prefijoCampo = "";
+                            foreach($datos['campo'] as $campo){
+                                echo $prefijoCampo . $value->{$datos['modelo']}->{$campo};
+                                $prefijoCampo = ", ";
+                            }
+                            ?>
+                            @else
                             {{ $value->{$datos['modelo']}->{$datos['campo']} }}
+                            @endif
                             @if(array_key_exists('enlace',$datos))
                             </a>
                             @endif
@@ -90,7 +101,17 @@ if (isset($config['render'])){
                             @if(array_key_exists('enlace',$datos))
                             <a href="{{ str_replace("{ID}",$value->{$columna}->{$datos['id']},str_replace(urlencode ("{ID}"),$value->{$columna}->{$datos['id']},$datos['enlace'])) }}">
                             @endif
+                            @if(is_array($datos['campo']))
+                            <?php
+                            $prefijoCampo = "";
+                            foreach($datos['campo'] as $campo){
+                                echo $prefijoCampo . $value->{$columna}->{$campo};
+                                $prefijoCampo = ", ";
+                            }
+                            ?>
+                            @else
                             {{ $value->{$columna}->{$datos['campo']} }}
+                            @endif
                             @if(array_key_exists('enlace',$datos))
                             </a>
                             @endif
@@ -98,13 +119,45 @@ if (isset($config['render'])){
                         -
                     @endif
                 @elseif ($datos['tipo']=="relationships")
-                    @if (count($value->{$columna}()->get())>0)
+                    @if (count($value->{$datos['modelo']}()->get())>0)
+                        @foreach($value->{$datos['modelo']}()->get() as $sub)
+                                <p>
+                                    @if(array_key_exists('enlace',$datos))
+                                    <a href="{{ str_replace("{ID}",$sub->{$datos['id']},str_replace(urlencode ("{ID}"),$sub->{$datos['id']},$datos['enlace'])) }}">
+                                    @endif
+                                    @if(is_array($datos['campo']))
+                                    <?php
+                                    $prefijoCampo = "";
+                                    foreach($datos['campo'] as $campo){
+                                        echo $prefijoCampo . $sub->{$campo};
+                                        $prefijoCampo = ", ";
+                                    }
+                                    ?>
+                                    @else
+                                    {{ $sub->{$datos['campo']} }}
+                                    @endif
+                                    @if(array_key_exists('enlace',$datos))
+                                    </a>
+                                    @endif
+                                </p>
+                        @endforeach
+                    @elseif (count($value->{$columna}()->get())>0)
                         @foreach($value->{$columna}()->get() as $sub)
                                 <p>
                                     @if(array_key_exists('enlace',$datos))
                                     <a href="{{ str_replace("{ID}",$sub->{$datos['id']},str_replace(urlencode ("{ID}"),$sub->{$datos['id']},$datos['enlace'])) }}">
                                     @endif
+                                    @if(is_array($datos['campo']))
+                                    <?php
+                                    $prefijoCampo = "";
+                                    foreach($datos['campo'] as $campo){
+                                        echo $prefijoCampo . $sub->{$campo};
+                                        $prefijoCampo = ", ";
+                                    }
+                                    ?>
+                                    @else
                                     {{ $sub->{$datos['campo']} }}
+                                    @endif
                                     @if(array_key_exists('enlace',$datos))
                                     </a>
                                     @endif
@@ -220,12 +273,15 @@ if (isset($config['render'])){
 {{ HTML::script("packages/sirgrimorum/cms/js/dataTables.tableTools.min.js") }}
 <script>
     $(document).ready(function() {
-        var lista_{{ $tabla }} = $('#list_{{ $tabla }}').DataTable({
+        var lista_{{ $tabla }} = $('#list_{{ $tablaid }}').DataTable({
             responsive: true,
             dom: 'Rlfrtip',
             tableTools: {
             sSwfPath: "/swf/copy_csv_xls_pdf.swf"
-            }
+            },
+            @if (isset($config['orden']))
+            order : {{ json_encode($config['orden']) }},
+            @endif
         });
         //new $.fn.dataTable.FixedHeader(lista_{{ $tabla }});
     });
