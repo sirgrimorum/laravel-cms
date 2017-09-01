@@ -1,4 +1,4 @@
-laravel-cms
+Sirgrimorum-cms
 ===========
 
-Simple translation utility from Database an JS
+Crud Generator y cms de artículos en JavaScript y Database
