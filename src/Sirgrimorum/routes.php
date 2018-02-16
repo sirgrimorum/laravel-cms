@@ -1,49 +1,37 @@
 <?php
 
-Route::group(array('prefix' => Config::get('cms::admin_prefix'), 'before' => 'validate_admin_translate'), function() {
-    //Admin Dashboard
-    Route::get('/', array(
-        'as' => 'admin_translations_home',
-        'uses' => 'Sirgrimorum\Cms\AdminTransController@home',
-    ));
-    Route::get('/relocate/{lang?}', array(
-        'as' => 'admin_translations_relocate',
-        'uses' => 'Sirgrimorum\Cms\AdminTransController@relocate',
-    ));
-    $routes = Config::get('cms::admin_routes');
-    foreach ($routes as $model => $opciones) {
-        $classname = "{$model}adminController";
-        $modelo = "Sirgrimorum\Cms\\{$model}";
-        $code = "namespace Sirgrimorum\Cms;
-                use Sirgrimorum\Cms;
-                class {$classname} extends CrudController { 
-                    protected \$tabla = '{$opciones['tabla']}'; 
-                    protected \$plural = '{$opciones['plural']}'; 
-                    protected \$nombre = '{$opciones['nombre']}'; 
-                    protected \$id = '{$opciones['id']}'; 
-                    protected \$modelo = '{$modelo}';
-                    protected \$relaciones = [";
-        foreach ($opciones['relaciones'] as $campo => $parametros) {
-            $code.= "'{$campo}'=>[";
-            foreach ($parametros as $key => $value) {
-                $code.= "'{$key}'=>'{$value}',";
-            }
-            $code .= "],";
+Route::group(['prefix' => "{localecode}/" . config("sirgrimorum_cms.admin_prefix"), 'middleware' => 'web'], function () {
+    Route::get('', function($localecode) {
+        App::setLocale($localecode);
+        //return $localecode;
+        $callback = config('sirgrimorum_cms.permission');
+        if (is_callable($callback)) {
+            $resultado = (bool) $callback();
+        } else {
+            $resultado = (bool) $callback;
         }
-        $code .= "];
-                    protected \$campos = [";
-        foreach ($opciones['campos'] as $campo => $parametros) {
-            $code.= "'{$campo}'=>[";
-            foreach ($parametros as $key => $value) {
-                $code.= "'{$key}'=>'{$value}',";
-            }
-            $code .= "],";
+        if (!$resultado) {
+            return redirect(config("sirgrimorum_cms.login_path"))->with([
+                        config("sirgrimorum_cms.error_messages_key") => trans('sirgrimorum_cms::admin.mensajes.permission'),
+                        config("sirgrimorum_cms.login_redirect_key") => route("sirgrimorum_cms_home", ['localecode' => $localecode])
+                            ]
+            );
         }
-        $code .= "];
-                }";
-        eval($code);
-
-        Route::resource($opciones['plural'], "Sirgrimorum\Cms\\" . $classname);
-    }
+        return view('sirgrimorum_cms::admin/templates/html');
+    })->name('sirgrimorum_cms_home');
+    Route::group(['prefix' => "{modelo}s/", 'as' => "sirgrimorum_cms_modelos::"], function() {
+        Route::get('', '\Sirgrimorum\Cms\CrudLoader\CrudController@index')->name('index');
+        Route::get('/create', '\Sirgrimorum\Cms\CrudLoader\CrudController@create')->name('create');
+    });
+    Route::group(['prefix' => "{modelo}/", 'as' => "sirgrimorum_cms_modelo::"], function() {
+        Route::post('/store', '\Sirgrimorum\Cms\CrudLoader\CrudController@store')->name('store');
+        Route::get('/{registro}', '\Sirgrimorum\Cms\CrudLoader\CrudController@show')->name('show');
+        Route::get('/{registro}/edit', '\Sirgrimorum\Cms\CrudLoader\CrudController@edit')->name('edit');
+        Route::put('/{registro}/update', '\Sirgrimorum\Cms\CrudLoader\CrudController@update')->name('update');
+        Route::delete('/{registro}/destroy', '\Sirgrimorum\Cms\CrudLoader\CrudController@destroy')->name('destroy');
+    });
 });
 
+Route::get(config("sirgrimorum_cms.admin_prefix"), function() {
+    return redirect(route('sirgrimorum_cms_home', config("sirgrimorum_cms.default_locale")));
+})->name('_sirgrimorum_cms_home');

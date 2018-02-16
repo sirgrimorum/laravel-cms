@@ -1,7 +1,9 @@
-<?php namespace SirGrimorum\Cms\TransArticles;
+<?php
+
+namespace SirGrimorum\Cms\TransArticles;
 
 use Exception;
-use Sirgrimorum\Cms\Article;
+use Sirgrimorum\Cms\Models\Article;
 
 class GetArticleFromDataBase {
 
@@ -18,7 +20,8 @@ class GetArticleFromDataBase {
      */
     function __construct($lang = '') {
         if ($lang == '') {
-            $this->lang = Config::get('cms::config.default_locale');;
+            $this->lang = config('app.locale');
+            ;
         } else {
             $this->lang = $lang;
         }
@@ -32,7 +35,7 @@ class GetArticleFromDataBase {
             } else {
                 $article = Article::findArticle($nickname)->first();
                 if (count($article)) {
-                    return $article->content . "<span class='label label-warning'>" . $article->lang . "</span>";
+                    return $article->content . "<small><span class='label label-warning'>" . $article->lang . "</span></small>";
                 } else {
                     return $nickname;
                 }
